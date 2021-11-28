@@ -1,11 +1,11 @@
-# Taps for Homebrew
+# Tap for Homebrew
 
-To tap my custom brew formulas, do:
+To use my homebrew tap:
 ```sh
 brew tap zigmars/taps
 ```
 
-To install specific formula, do:
+And then, to install a particular `<formula>`, do:
 ```sh
 brew install zigmars/taps/<formula name>
 ```
