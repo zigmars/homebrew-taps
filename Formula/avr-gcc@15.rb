@@ -8,7 +8,7 @@ class AvrGccAT15 < Formula
 
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
-  head "https://gcc.gnu.org/git/gcc.git", branch: "master"
+  head "https://gcc.gnu.org/git/gcc.git", branch: "releases/gcc-15"
 
   # The bottles are built on systems with the CLT installed, and do not work
   # out of the box on Xcode-only systems due to an incorrect sysroot.
