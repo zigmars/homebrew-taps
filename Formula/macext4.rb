@@ -1,3 +1,24 @@
+# fuse-t (https://www.fuse-t.org) is only a Cask, and Homebrew formulas
+# can't `depends_on` a cask directly, so this is a non-fatal Requirement
+# that just recommends it — same pattern as this tap's own ext4fuse.rb.
+class FuseTRequirement < Requirement
+  fatal false
+
+  satisfy(build_env: false) do
+    File.exist?("/Library/Application Support/fuse-t/uninstall.sh") ||
+      quiet_system("brew", "list", "--cask", "fuse-t")
+  end
+
+  def message
+    <<~EOS
+      fuse-t is recommended if you also want to use MacExt4's Finder-mount
+      workflow (mount_finder.sh, from a checkout of the repo — this formula
+      only installs the `macext4` CLI):
+        brew install --cask fuse-t
+    EOS
+  end
+end
+
 class Macext4 < Formula
   include Language::Python::Virtualenv
 
@@ -15,6 +36,7 @@ class Macext4 < Formula
   # Provides `debugfs`/`mke2fs`, used as an optional fallback engine and by
   # the `create-demo` command. Not required for normal read-only browsing.
   depends_on "e2fsprogs"
+  depends_on FuseTRequirement => :recommended
 
   # Pure-Python wheel for github.com/Eeems/python-ext4 (the "ext4" PyPI
   # package). Its sdist builds via Nuitka, which we don't need since the
@@ -69,8 +91,8 @@ class Macext4 < Formula
       The desktop app (LinuxSSDReader.app), the web dashboard (run.sh) and
       Finder mounting (mount_finder.sh) are not installed: upstream ships no
       requirements.txt/pyproject.toml pinning their extra dependencies
-      (fastapi, uvicorn, pywebview, pyobjc) or, for Finder mounting,
-      `fuse-t`. To use those, clone the repo directly and follow its README.
+      (fastapi, uvicorn, pywebview, pyobjc). To use those, clone the repo
+      directly and follow its README.
 
       Since upstream has not tagged a release, this formula tracks a pinned
       commit rather than a version number.
