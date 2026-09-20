@@ -1,3 +1,5 @@
+require "cask/caskroom"
+
 # fuse-t (https://www.fuse-t.org) is only a Cask, and Homebrew formulas
 # can't `depends_on` a cask directly, so this is a non-fatal Requirement
 # that just recommends it — same pattern as this tap's own ext4fuse.rb.
@@ -5,8 +7,8 @@ class FuseTRequirement < Requirement
   fatal false
 
   satisfy(build_env: false) do
-    File.exist?("/Library/Application Support/fuse-t/uninstall.sh") ||
-      quiet_system("brew", "list", "--cask", "fuse-t")
+    # internal API, but formulae are exempted from that restriction
+    Cask::Caskroom.cask_installed?("fuse-t")
   end
 
   def message
